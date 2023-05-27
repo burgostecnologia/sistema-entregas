@@ -18,6 +18,12 @@
 	</properties>
 	<dependencies>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+
 		<!-- como fazer um content negociation (transformar o retorno em xml o jackson do spring faz a conversao default para json, 
 		colocando essa dependencia tb pode permitir converter para retorno em xml, basta colocar no header 'Accept' o 'application/xml') -->
 		<dependency>
