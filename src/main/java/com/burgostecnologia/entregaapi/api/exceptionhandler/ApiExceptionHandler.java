@@ -9,14 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.burgostecnologia.entregaapi.domain.exceptionhandler.NegocioException;
 
 @ControllerAdvice   //notação para trata exceção de qualquer controller
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -48,6 +52,20 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         //return super.handleMethodArgumentNotValid(ex, headers, status, request);
         return handleExceptionInternal(ex, problema, headers, status, request);
     }
+
+    @ExceptionHandler(NegocioException.class)  //notacao para tratar qq exception lancada(throw) na classe NegocioException.class
+    public ResponseEntity<Object> handleNegocio(NegocioException ex,WebRequest request){ //essemetodo trata o NegocioException
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        
+        Problema problema = new Problema();   
+        problema.setStatus(status.value());
+        problema.setDataHora(LocalDateTime.now());            
+        problema.setTitulo("Já existe um usuário com esse e-mail");
+        
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+    }    
+
 
  
 }

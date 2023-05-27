@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.burgostecnologia.entregaapi.domain.model.Cliente;
 import com.burgostecnologia.entregaapi.domain.repository.ClienteRepository;
+import com.burgostecnologia.entregaapi.domain.service.ClienteService;
 
 import jakarta.validation.Valid;
 
@@ -37,6 +38,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteService clienteService;
 
     //opcao 1 listarCliente por ID sem tratar retorno de status
     // @GetMapping("/{clienteId}")
@@ -111,11 +115,12 @@ public class ClienteController {
 
         // return Arrays.asList(cliente1, cliente2);
     }
-
+    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) //forma direta de setar o status sem precisar do ResponseEntity
     public Cliente adicionarCliente(@Valid @RequestBody Cliente cliente){
-        return clienteRepository.save(cliente);
+        //return clienteRepository.save(cliente);
+        return clienteService.salvarCliente(cliente);
     }
 
     @PutMapping("/{idCliente}")
@@ -124,7 +129,8 @@ public class ClienteController {
             return ResponseEntity.notFound().build();
         }
         cliente.setId(idCliente); // para atualizar o id senao o metodo save abaixo criaria um novo
-        cliente = clienteRepository.save(cliente);      
+        //cliente = clienteRepository.save(cliente);      
+        cliente = clienteService.salvarCliente(cliente);      
         return ResponseEntity.ok(cliente);
 
     }
@@ -134,7 +140,8 @@ public class ClienteController {
         if(!clienteRepository.existsById(idCliente)){
             return ResponseEntity.notFound().build(); //404 - nao existe
         }
-        clienteRepository.deleteById(idCliente);
+        //clienteRepository.deleteById(idCliente);
+        clienteService.excluirCliente(idCliente);
         return ResponseEntity.noContent().build(); //204 - executa a operacao e nao tem retorno de body . exemplo para delete
     }
 
