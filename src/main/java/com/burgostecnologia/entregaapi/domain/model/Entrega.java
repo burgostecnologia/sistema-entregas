@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +34,7 @@ public class Entrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private BigDecimal taxa;
 
     @JsonProperty(access = Access.READ_ONLY) // usamos a entity para receber o requestbody, logo teoricamente poderia serenviado campos que maliciosamente nao deveriam ser atualizados por isso conseguimos travar com essa notacao
@@ -42,6 +45,7 @@ public class Entrega {
 
     @ManyToOne //faz com que o modelo de banco crie o join (cria a fk)
     //@JoinColumn(name = "nome da cluna que quer fazer o join") //Pode escolher com qual campo fazer o join , se não usar o padrao fica o tabela_id 
+    @NotNull
     private Cliente cliente;
 
     @Embedded //não cria uma tabela é mais para fazer abstracao(melhor uso de OO) mas grava mesmo esses campos na tabela entrega

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.burgostecnologia.entregaapi.domain.model.Entrega;
 import com.burgostecnologia.entregaapi.domain.service.EntregaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/entregas")
 public class EntregaController {
@@ -19,7 +21,7 @@ public class EntregaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Entrega solicitarEntrega(@RequestBody Entrega entrega){
+    public Entrega solicitarEntrega(@Valid @RequestBody Entrega entrega){
         return entregaService.solicitarEntregar(entrega);
     }
 
