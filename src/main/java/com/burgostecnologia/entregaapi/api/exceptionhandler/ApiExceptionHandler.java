@@ -54,14 +54,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NegocioException.class)  //notacao para tratar qq exception lancada(throw) na classe NegocioException.class
-    public ResponseEntity<Object> handleNegocio(NegocioException ex,WebRequest request){ //essemetodo trata o NegocioException
+    public ResponseEntity<Object> handleNegocio(NegocioException ex,WebRequest request){ //esse metodo trata o NegocioException
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
         
         Problema problema = new Problema();   
         problema.setStatus(status.value());
         problema.setDataHora(LocalDateTime.now());            
-        problema.setTitulo("Já existe um usuário com esse e-mail");
+        problema.setTitulo(ex.getMessage());
+        //problema.setTitulo("Já existe um usuário com esse e-mail");
         
         return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
     }    
