@@ -3,8 +3,10 @@ package com.burgostecnologia.entregaapi.domain.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.burgostecnologia.entregaapi.domain.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+//import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Embedded;
@@ -17,7 +19,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +33,7 @@ import lombok.Setter;
 @Table(name="entrega")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Entrega {
+
 
     @Id
     @EqualsAndHashCode.Include
@@ -45,9 +51,13 @@ public class Entrega {
 
     @ManyToOne //faz com que o modelo de banco crie o join (cria a fk)
     //@JoinColumn(name = "nome da cluna que quer fazer o join") //Pode escolher com qual campo fazer o join , se não usar o padrao fica o tabela_id 
+    @Valid
+    @ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)
     @NotNull
     private Cliente cliente;
 
+    @Valid
+    @NotNull
     @Embedded //não cria uma tabela é mais para fazer abstracao(melhor uso de OO) mas grava mesmo esses campos na tabela entrega
     private Destinatario destinatario;
 
